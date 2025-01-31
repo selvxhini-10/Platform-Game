@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 781172c2ce7fea84a98f79c000918e87
+guid: 709440ccf51152a46b5a4994b9300524
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -113,13 +113,13 @@ TextureImporter:
       name: Square_0
       rect:
         serializedVersion: 2
-        x: 48
+        x: 0
         y: 0
-        width: 56
-        height: 150
+        width: 512
+        height: 512
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 56, w: 0}
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
