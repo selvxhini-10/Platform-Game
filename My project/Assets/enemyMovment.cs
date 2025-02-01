@@ -4,13 +4,12 @@ public class EnemyPatrol : MonoBehaviour
 {
     public Transform pointA;
     public Transform pointB;
-    public float speed = 1f;
-    private Transform target;
-    private bool movingToPointB = true;
+    public float speed = 3f;
+    private Vector3 target;
 
     void Start()
     {
-        target = pointB; 
+        target = pointB.position; 
     }
 
     void Update()
@@ -20,22 +19,24 @@ public class EnemyPatrol : MonoBehaviour
 
     void Patrol()
     {
-        transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, target.position) < 0.1f)
+        if (Vector3.Distance(transform.position, target) < 0.1f)
         {
-            if (movingToPointB)
+            if (target == pointB.position)
             {
-                target = pointA;
-                movingToPointB = false;
+                target = pointA.position;
+                Debug.Log("Switching to PointA");
             }
             else
             {
-                target = pointB;
-                movingToPointB = true;
+                target = pointB.position;
+                Debug.Log("Switching to PointB");
             }
             Flip();
         }
+
+        Debug.Log("Current Position: " + transform.position);
     }
 
     void Flip()
