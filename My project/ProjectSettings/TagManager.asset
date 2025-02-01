@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - Ground
+  - Spike
+  - Enemy
+  - PlasticCan
   layers:
   - Default
   - TransparentFX
