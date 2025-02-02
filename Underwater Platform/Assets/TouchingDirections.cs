@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class TouchingDirections : MonoBehaviour
 {
+    
     public ContactFilter2D castFilter;
     Animator animator;
     public float groundDistance = 0.05f;
@@ -11,7 +12,7 @@ public class TouchingDirections : MonoBehaviour
     RaycastHit2D[] groundHits = new RaycastHit2D[5];
 
     [SerializeField]
-    private bool _isGrounded;
+    private bool _isGrounded = true;
 
     public bool IsGrounded {  get
         {
@@ -22,7 +23,8 @@ public class TouchingDirections : MonoBehaviour
             animator.SetBool("isGrounded", value);
         }
     }
-    public int IsGround { get; private set; }
+    public bool IsGround { get; private set; }
+    public bool IsOnWall { get; internal set; }
 
     private void Awake()
     {
@@ -37,8 +39,9 @@ public class TouchingDirections : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+   void Update()
     {
-            IsGround = touchingCol.Cast(Vector2.down,castFilter, groundHits, groundDistance);
+        //touchingCol.Cast(Vector2.down, castFilter, groundHits, groundDistance);  
+        IsGround = touchingCol.Cast(Vector2.down,castFilter, groundHits, groundDistance) > 0;
     }
 }

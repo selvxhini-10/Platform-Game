@@ -1,18 +1,40 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-[RequireComponent(typeof(Rigidbody2D))]
+
+[RequireComponent(typeof(Rigidbody2D),typeof(TouchingDirections))]
 public class Player : MonoBehaviour
 {
-
-    Vector2 moveInput;
     public float walkSpeed = 5f;
     public float runSpeed = 9f;
+    Vector2 moveInput;
+    TouchingDirections touchingDirections;
 
+    private Animator playerAnimation;
+
+    private Vector3 respawnPoint;
+    public GameObject fallDetector;
+
+    public float jumpSpeed = 18f;
+
+    public Transform groundCheck;
+    public float groundCheckRadius;
+    public LayerMask groundLayer;
+        private bool isTouchingGround;
+    public Text scoreText;
+
+    void Start()
+    {
+        playerAnimation = GetComponent<Animator>();
+        respawnPoint = transform.position;
+        scoreText.text = "Score: " + Scoring.totalScore;
+    }
     public float CurrentMoveSpeed {  get
         {
-if (IsMoving)
+            if (IsMoving)
             {
                 if (IsRunning)
                 {
@@ -20,7 +42,7 @@ if (IsMoving)
 
                 } else
                 {
-return walkSpeed;
+                    return walkSpeed;
                 }
             } else
             {
@@ -82,29 +104,50 @@ return walkSpeed;
     Rigidbody2D rb;
     Animator animator;
 
+    private void Update()
+    {
+        isTouchingGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        if (Input.GetButtonDown("Jump") && isTouchingGround)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpSpeed);
+        }
+
+        fallDetector.transform.position = new Vector2(transform.position.x, fallDetector.transform.position.y);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "FallDetector")
+        {
+            transform.position = respawnPoint;
+        } else if (collision.tag == "Checkpoint")
+        {
+            respawnPoint = transform.position;
+        } else if (collision.tag == "Item")
+        {
+            Scoring.totalScore += 1;
+            scoreText.text = "Score: " + Scoring.totalScore;
+            collision.gameObject.SetActive(false);
+        }
+    }
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        touchingDirections = GetComponent<TouchingDirections>();
     }
 
     private void FixedUpdate()
     {
         rb.linearVelocity = new Vector2(moveInput.x * CurrentMoveSpeed, rb.linearVelocity.y);
+        rb.angularVelocity = 0f; // Prevents rotation
+
+        animator.SetFloat("yVelocity", rb.linearVelocity.y);
+       // animator.SetBool("isGrounded", touchingDirections.IsGround);
     }
-    public void OnMove(InputAction.CallbackContext context) 
+
+    public void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
 
@@ -112,6 +155,7 @@ return walkSpeed;
 
         SetFacingDirection(moveInput);
     }
+
 
     private void SetFacingDirection(Vector2 moveInput)
     {
@@ -135,6 +179,5 @@ return walkSpeed;
             IsRunning = false;
         }
     }
-    
-        
+  
 }
