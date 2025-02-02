@@ -20,6 +20,7 @@ We gained insight into the complexities of game development and useful strategie
 
 ## What's next for Plastic Frenzy
 **Expanding gameplay features**: Adding more levels, missions, and power-ups to keep players engaged. 
+
 **Enhancing ad integration**: Optimizing ad interactions for better revenue generation and increased cleanup impact. 
 **Building partnerships**: Collaborating with sustainable brands and organizations to provide tangible rewards for players. 
 **Developing a community**: Creating leaderboards and social sharing features to boost engagement and spread awareness.
